@@ -2,7 +2,7 @@
 Title   : LangChainとLangGraphによるRAG・AIエージェント実践入門
 Chapter : 6 Advanced RAG
 Section : 3 検索クエリの工夫
-Theme   : HyDE（Hypothetical Document Embeddings）を用いた検索クエリの工夫
+Theme   : 単一の仮回答に基づいてHyDEを行う
 Date    : 2025/05/25
 Page    : P134-136
 """
