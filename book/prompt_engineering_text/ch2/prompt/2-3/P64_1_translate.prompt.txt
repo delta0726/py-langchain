@@ -1,0 +1,5 @@
+### 指示
+日本語に翻訳してください。
+### 入力
+Keep on asking, and it will be given you; keep on seeking, and you will find; keep on knocking, and it will be opened to you
+### 出力
