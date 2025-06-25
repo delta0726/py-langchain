@@ -1,0 +1,6 @@
+# パッケージのインストール
+! pip install llama-cpp-python==0.2.13
+
+# Llama 2のモデルをダウンロード
+! wget https://huggingface.co/TheBloke/vicuna-7B-v1.5-GGUF/resolve/main/vicuna-7b-v1.5.Q4_0.gguf
+

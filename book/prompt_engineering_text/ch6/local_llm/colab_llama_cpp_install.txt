@@ -1,0 +1,6 @@
+# パッケージのインストール
+! pip install llama-cpp-python==0.2.13
+
+# Llama 2のモデルをダウンロード
+! wget https://huggingface.co/TheBloke/Llama-2-7B-GGUF/resolve/main/llama-2-7b.Q2_K.gguf
+

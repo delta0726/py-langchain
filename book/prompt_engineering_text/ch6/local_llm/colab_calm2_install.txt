@@ -1,0 +1,5 @@
+# パッケージのインストール
+! pip install llama-cpp-python==0.2.13
+
+# CALM2-7B をダウンロード
+! wget https://huggingface.co/mmnga/cyberagent-calm2-7b-gguf/resolve/main/cyberagent-calm2-7b-q4_K_M.gguf

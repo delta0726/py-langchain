@@ -1,0 +1,26 @@
+# パッケージのインストール --- (*1)
+!pip install transformers==4.35.0 accelerate==0.24.1 \
+    bitsandbytes==0.41.1 sentencepiece==0.1.99
+
+# モデルの読み込みなどを行う --- (*2)
+model_name = 'line-corporation/japanese-large-lm-3.6b-instruction-sft'
+import locale
+locale.getpreferredencoding = lambda: "UTF-8"
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+
+# テキスト生成を行う関数を定義 --- (*3)
+def generate(prompt, temperature=0.7, max_length=200):
+  input_ids = tokenizer.encode(prompt, add_special_tokens=False, return_tensors="pt")
+  tokens = model.generate(
+    input_ids.to(device=model.device),
+    max_length=max_length,
+    temperature=temperature,
+    do_sample=True,
+    top_p=0.95,
+    pad_token_id=tokenizer.pad_token_id,
+  )
+  output = tokenizer.decode(tokens[0])
+  return output

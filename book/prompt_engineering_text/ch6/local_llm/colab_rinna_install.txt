@@ -1,0 +1,6 @@
+# パッケージのインストール
+! pip install llama-cpp-python==0.2.13
+
+# rinna/Youri 7BのChatモデルをダウンロード
+! wget https://huggingface.co/mmnga/rinna-youri-7b-chat-gguf/resolve/main/rinna-youri-7b-chat-q4_K_S.gguf
+
