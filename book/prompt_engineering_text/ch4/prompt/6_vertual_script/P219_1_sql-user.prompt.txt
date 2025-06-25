@@ -1,0 +1,8 @@
+ダミーデータを想像して次のSQL実行して結果を出力してください。
+
+```sql
+SELECT name, age, email
+FROM users
+WHERE gender='woman'
+LIMIT 10;
+```

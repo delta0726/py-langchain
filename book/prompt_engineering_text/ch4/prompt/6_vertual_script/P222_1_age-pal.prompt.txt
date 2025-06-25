@@ -1,0 +1,32 @@
+### 前提:
+今日は2024年の7月10日です。
+### 指示:
+私は今日で25才と5ヶ月になりました。
+妹は私より5才と1ヶ月だけ年下です。
+妹が生まれのはいつですか。
+Pythonのプログラムを作ってください。
+### 出力例:
+{"birth": "YYYY/MM/DD"}
+### ヒント:
+Q: 今日が2024年7月10日の時、24才1ヶ月の人の誕生日はいつですか？
+# 24才1ヶ月の人の誕生日は、今日から24年と1ヶ月前の日付です
+birth_of_date = datetime(2024, 7, 10) - relativedelta(years=24, month=1)
+# YYYY/MM/DDの形式で出力します
+print(birth_of_date.strftime('%Y/%m/%d')) 
+A: 2000/6/10
+Q: 今日は2024年7月10日ですが、21年1ヶ月前をaとし、その後10ヶ月後の日付bはいつですか？
+# 今日の日付をセット
+today = datetime(2024, 7, 10)
+# 今日から21年1ヶ月前をaとする
+a = today - relativedelta(years=21, months=1)
+# aの10ヶ月後を計算
+b = a + relativedelta(month=10)
+# 答えをYYYY/MM/DDで出力
+print(b.strftime('%Y/%m/%d'))
+A: 2003/10/10
+Q: 妹は5才年下です。私が2000年生まれなら、妹は何年生まれですか？
+# 私の生年を指定
+my_birth_year = 2000
+# 妹は5才年下なので+5する
+sister_age = my_birth_year + 5
+A: 2005

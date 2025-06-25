@@ -1,0 +1,6 @@
+次のSQLの出力結果を考えてください。
+
+SELECT 国や地域, 人口
+FROM 世界人口ランキング
+ORDER BY 人口 DESC
+LIMIT 10;
