@@ -1,0 +1,11 @@
+### 指示
+次の入力(英語の格言)を日本語に翻訳してください。
+なお、次の手順に従ってください。
+
+### 手順
+- 直訳的に翻訳してください。
+- 誰にでも分かるように意訳してください。
+- 結論を一言で述べてください。
+
+### 入力
+Do not eat the food of a stingy person; Do not crave his delicacies, For he is like one keeping accounts. "Eat and drink," he says to you, but he does not mean it.

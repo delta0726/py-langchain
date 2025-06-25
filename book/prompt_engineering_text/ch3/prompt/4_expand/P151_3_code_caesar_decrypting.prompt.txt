@@ -1,0 +1,9 @@
+### 指示
+入力として与えた英文は、シーザー暗号で暗号化されています。
+この暗号文を解くプログラムを作ってください。
+### ヒント
+統計的解析によって暗号文を解読するコードを生成してください。
+英語では'e'が最も使われるアルファベットです。
+頻度を調べることでシーザー暗号を解くことができます。
+### 入力
+'''Ulaly sld l aczgpcm esle dljd, "Pgpy l ozr htww cfy tyez l detnv hspy te hlwvd." Te txawtpd esle hspy jzf elvp lnetzy, jzf xtrse pynzfyepc yze zywj rzzo zfenzxpd mfe lwdz mlo zypd zc fypiapnepo pgpyed. Dapntqtnlwwj, hspy jzf ecj dzxpestyr yph zc mpslgp otqqpcpyewj esly fdflw, jzf xtrse piapctpynp yze zywj azdtetgp cpdfwed zc zaazcefytetpd mfe lwdz aczmwpxd, nslwwpyrpd, zc nctetntdxd.'''

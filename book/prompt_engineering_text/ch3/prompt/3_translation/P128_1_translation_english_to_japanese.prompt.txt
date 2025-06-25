@@ -1,0 +1,4 @@
+### 指示
+次の入力文章を日本語に翻訳してください。
+### 入力
+Do not eat the food of a stingy person; Do not crave his delicacies, For he is like one keeping accounts. "Eat and drink," he says to you, but he does not mean it.

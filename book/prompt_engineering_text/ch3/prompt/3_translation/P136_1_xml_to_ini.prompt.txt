@@ -1,0 +1,16 @@
+### 指示
+次の入力にあるXMLをINI形式に変換してくだしさい。
+### 出力例
+[Sakura]
+x=30
+y=59
+[Nadesiko]
+x=99
+y=60
+### 入力
+<configure>
+  <window title="Sakura"><params x="30" y="59"></window>
+  <window title="Nadesiko"><params x="99" y="60"></window>
+  <window title="Himawari"><params x="10" y="20"></window>
+  <window title="Aoi"><params x="200" y="300"></window>
+</configure>

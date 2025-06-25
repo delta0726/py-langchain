@@ -1,0 +1,11 @@
+### 指示
+次の入力にあるXMLをJSON形式に変換してくだしさい。
+### 出力例
+["カツオ", "ヒラメ", ...]
+### 入力
+<items>
+  <item><name>カツオ</name><kg>3</kg></item>
+  <item><name>ヒラメ</name><kg>2</kg></item>
+  <item><name>タイ</name><kg>2</kg></item>
+  <item><name>サーモン</name><kg>4</kg></item>
+</items>

@@ -1,0 +1,16 @@
+### 指示
+次の入力(英文)を日本語に翻訳してください。
+### 条件
+読み手に失礼がないことを確認して、ビジネス文章のスタイルで出力してください。
+### 入力
+Dear Sir/Madam,
+
+We have booked a room of your hotel through your website. 
+Could you please reconfirm our booking?
+- 1 twin room, 2 beds
+- Check-in: October 1
+- Check-out: Octover 3
+- Breakfast included
+
+Best regards,
+
