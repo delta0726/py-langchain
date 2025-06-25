@@ -1,0 +1,21 @@
+### 指示:
+PythonとSeleniumを利用してのWebサイトのスクリーンショットを撮影します。
+画面全体が必要です。以下を参考にして使ってください。
+撮影したいWebサイトのURLは以下です。
+- https://nadesi.com
+- https://kujirahand.com
+### 参考
+```py
+import os, datetime
+from selenium import webdriver
+# ヘッドレス起動する
+options = webdriver.ChromeOptions()
+options.add_argument('--headless')
+driver = webdriver.Chrome(options=options)
+# スクリーンショットを撮影
+def fullpage_screenshot(driver, file):
+    w = driver.execute_script("return document.body.parentNode.scrollWidth")
+    h = driver.execute_script("return document.body.parentNode.scrollHeight")
+    driver.set_window_size(w, h)
+    driver.save_screenshot(file)
+```

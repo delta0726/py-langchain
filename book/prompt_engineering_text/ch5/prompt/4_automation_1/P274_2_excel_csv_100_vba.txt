@@ -1,0 +1,22 @@
+Sub ConvertExcelToCSV()
+    Dim SourceFolderPath As String
+    Dim TargetFolderPath As String
+    Dim MyFile As String
+    ' 変換元のExcelファイルのフォルダーパスを設定 --- (※1)
+    SourceFolderPath = Excel.ActiveWorkbook.Path & "\"
+    ' 変換後のCSVファイルの保存フォルダーパスを設定（同じフォルダーに保存）
+    TargetFolderPath = SourceFolderPath
+    MyFile = Dir(SourceFolderPath & "*.xlsx")
+    ' ファイルが見つかるまでループ
+    Do While MyFile <> ""
+        ' Excelファイルを開く
+        Workbooks.Open SourceFolderPath & MyFile
+        ' CSVファイルとして保存
+        ActiveSheet.SaveAs TargetFolderPath & Left(MyFile, Len(MyFile) - 5) & ".csv", xlCSV
+        ' ワークブックを閉じる
+        ActiveWorkbook.Close SaveChanges:=False
+        ' 次のExcelファイルを処理
+        MyFile = Dir
+    Loop
+End Sub
+

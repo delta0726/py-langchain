@@ -1,0 +1,32 @@
+Sub CreateInvitations()
+    Dim wsData As Worksheet
+    Dim wsTemplate As Worksheet
+    Dim LastRow As Long
+    Dim i As Long
+    Dim fn As String
+    ' 名簿が含まれるシートを指定します
+    Set wsData = ThisWorkbook.Sheets("Sheet1")
+    ' 招待状のひな形が含まれるシートを指定します
+    Set wsTemplate = ThisWorkbook.Sheets("Sheet2")
+    ' 名簿のデータが含まれる列の最終行を取得します
+    LastRow = wsData.Cells(wsData.Rows.Count, "A").End(xlUp).Row
+    ' 名簿の各行について招待状を生成します
+    For i = 2 To LastRow ' 1行目はヘッダーなので2行目から始めます
+        ' 招待状のひな形をコピー
+        wsTemplate.Copy Before:=ThisWorkbook.Sheets(1)
+        Set wsNewInvitation = ThisWorkbook.Sheets(1)
+        ' 名前をセルに挿入
+        wsNewInvitation.Range("B3").Value = wsData.Cells(i, 1).Value
+        ' PDFファイルとして保存
+        fn = ThisWorkbook.Path & "\" & wsData.Cells(i, 1).Value & "_招待状.pdf"
+        wsNewInvitation.ExportAsFixedFormat Type:=xlTypePDF, FileName:=fn, _
+            Quality:=xlQualityStandard, IncludeDocProperties:=True, IgnorePrintAreas:=False, _
+            OpenAfterPublish:=False
+        ' 新しいシートを削除
+        Application.DisplayAlerts = False ' 削除の確認ダイアログを無効にします
+        wsNewInvitation.Delete
+        Application.DisplayAlerts = True
+    Next i
+    ' 完了メッセージを表示
+    MsgBox "招待状の生成が完了しました。"
+End Sub

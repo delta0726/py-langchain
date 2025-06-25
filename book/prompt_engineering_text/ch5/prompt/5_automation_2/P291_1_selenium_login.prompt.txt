@@ -1,0 +1,17 @@
+### 指示:
+PythonとSeleniumを使ってChromeブラウザを自動操縦します。
+以下の手順に沿って、Webサイトにログインして、リンクをクリックしてください。
+### 条件:
+Seleniumのバージョンは4.14以降です。
+Chrome WebDriverは自動でインストールされます。
+### 情報:
+1.ログインに必要な情報
+- URL: https://uta.pw/sakusibbs/users.php?action=login
+- inputタグ(Selector='#user')に'book-prompt'を入力
+- inputタグ(Selector='#pass')に'1LUSwKxrsc6WKk1y'を入力
+- ボタン(Selector=#loginForm input[type=submit]をクリック
+2.マイページに移動
+- URL: https://uta.pw/sakusibbs/users.php?user_id=2045
+3. リンクをクリック
+- ラベル: 一覧をCSVでダウンロード
+

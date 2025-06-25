@@ -1,0 +1,11 @@
+### 指示:
+PythonとSeleniumを使ってChromeブラウザを自動操縦します。
+以下の手順に従ってください。
+### 手順:
+1. ブラウザのウィンドウサイズを最大にしてください。
+2. 「https://kujirahand.com」のページをキャプチャして「web1.png」に保存
+3. 「https://nadesi.com」のページをキャプチャして「web2.png」に保存
+### 条件:
+Seleniumのバージョンは4.14以降です。
+ドライバの初期化は、`driver = webdriver.Chrome()`としてください。
+

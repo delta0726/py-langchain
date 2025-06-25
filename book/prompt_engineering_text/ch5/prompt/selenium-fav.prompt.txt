@@ -1,0 +1,25 @@
+### 指示:
+PythonとSeleniumを使ってChromeブラウザを自動操縦します。
+以下の手順に沿って、Webサイトにログインして、リンクをたどってお気に入りボタンをクリックしてください。
+### 条件:
+Seleniumのバージョンは4.14以降です。
+find_element_by_css_selectorを使わずに、find_elementメソッドを使ってください。
+Chrome WebDriverは自動でインストールされます。
+サーバー負荷を抑えるようページの移動時には、`time.sleep(1)`を実行してください。
+### 情報:
+1.ログインに必要な情報
+- URL: https://uta.pw/sakusibbs/users.php?action=login
+- inputタグ(Selector='#user')に'book-prompt'を入力
+- inputタグ(Selector='#pass')に'1LUSwKxrsc6WKk1y'を入力
+- ボタン(Selector=#loginForm input[type=submit]をクリック
+2.作品一覧ページに移動
+- URL: https://uta.pw/sakusibbs/users.php?user_id=1
+3. 作品一覧リンクを取得
+- ulタグ(Selector='#mmlist')以下にあるURLの一覧を取得
+- 取得したURL一覧を文字列リストにして、変数url_listに代入
+- 変数url_listのURLに対して、以下の処理を実行
+4. 作品ページに移動をクリック
+- URLにアクセス
+- ページ内にボタン(Selector='#fav_add_btn')があるか？
+- ボタンがあればクリック
+
