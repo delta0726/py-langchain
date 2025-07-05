@@ -30,10 +30,10 @@ prompt = ChatPromptTemplate.from_messages(
 
 # プロンプト作成
 image_url = "https://raw.githubusercontent.com/yoshidashingo/langchain-book/main/assets/cover.jpg"
-prompt_value = prompt.invoke({"image_url": image_url})
+prompt_value = prompt.invoke(input={"image_url": image_url})
 
 # 問い合わせ
-model = ChatOpenAI(model="gpt-4o", temperature=0)
+model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 ai_message = model.invoke(input=prompt_value)
 
 # 結果確認

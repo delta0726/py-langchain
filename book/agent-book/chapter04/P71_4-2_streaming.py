@@ -9,7 +9,8 @@ Page    : P71
 
 # ＜ポイント＞
 # - APIの応答をストリーミングで受け取ることができる
-#   --- リアルタイム性を高めることでアプリケーションのUXを向上させる
+# - CallBack機能を使ってストリーミング処理を実装することも化k脳
+# - ストリーミング機能はリアルタイム性を高めることでアプリケーションのUXを向上させる
 
 from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_openai import ChatOpenAI

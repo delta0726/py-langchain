@@ -9,8 +9,8 @@ Page    : P83
 
 # ＜ポイント＞
 # - strOutputParserはLLMの出力をテキストに変換するために使用する
-# - 質問や出力結果のテキストを抽出する際に使用する
-# - LCELの構成要素としてチェーン処理に活用する（単にテキストを出力することが目的ではない）
+# - ouput.contentのように指定しなくてもテキストを取得できるのがメリット
+# - LCELの構成要素としてチェーン処理に活用する（出力方式を確定させることでコードの簡素化）
 
 from langchain_core.messages import AIMessage
 from langchain_core.output_parsers import StrOutputParser
@@ -23,8 +23,10 @@ output_parser = StrOutputParser()
 ai_message = AIMessage(content="こんにちは。私はAIアシスタントです。")
 
 # テキストの取得
+# --- LLMへの問い合わせはしていない
 ai_message = output_parser.invoke(input=ai_message)
 
 # 結果確認
 print(type(ai_message))
 print(ai_message)
+

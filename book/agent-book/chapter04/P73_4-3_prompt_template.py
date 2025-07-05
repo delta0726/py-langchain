@@ -17,10 +17,13 @@ from langchain_core.prompts import PromptTemplate
 
 
 # テンプレート定義
+# --- {dish}などとしてプレースホルダーとして変数を指定する
+# --- f-stringの記法と同様だが、template引数の中ではf''の指定は不要
 prompt = PromptTemplate.from_template(
     template="""
     以下の料理のレシピを考えてください。
-    料理名: {dish}"""
+    料理名: {dish}
+    """
 )
 
 # プロンプト作成

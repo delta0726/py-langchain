@@ -4,13 +4,13 @@ Chapter : 4 LangChainの基礎
 Section : 3 Prompt Template
 Theme   : メッセージ・プレースホルダー
 Date    : 2025/05/14
-Page    : P74
+Page    : P75-76
 """
 
 # ＜ポイント＞
 # - プレースホルダとは後から値や文字を入力できるように一時的に格納する値や文字を指す
 # - MessagesPlaceholderはチャット履歴をプレースホルダとして格納する
-#   --- 過去の記憶に基づくチャットを行う場合の標準的なソリューション
+# - プレースホルダーとしてチャット履歴を分離することでプロンプトが簡素化される
 
 from langchain_core.messages import AIMessage, HumanMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder

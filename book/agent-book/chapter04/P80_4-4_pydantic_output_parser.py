@@ -1,15 +1,16 @@
 """
 Title   : LangChainとLangGraphによるRAG・AIエージェント実践入門
 Chapter : 4 LangChainの基礎
-Section : 4 Output parser
-Theme   : PydanticOutputParserを使ったPythonオブジェクトへの変換
+Section : 4 Pydantic Output Parser
+Theme   : 出力結果のPythonオブジェクトへの変換
 Date    : 2025/05/16
 Page    : P80
 """
 
 # ＜ポイント＞
-# - Pydanticはデータの入れ物として使うことができるクラス
-# - PydanticOutputParserはJSONフォーマット専用の出力パーサー
+# - Pydanticは構造化された出力が欲しい場合に使用するのがベストプラクティス
+# - 項目名やデータ型を明確に指定することができる（誤作動や事故の防止）
+# - 出力結果のバリデーション(評価)も行いやすくなる
 
 from pydantic import BaseModel, Field
 from langchain_openai import ChatOpenAI

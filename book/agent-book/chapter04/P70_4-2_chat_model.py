@@ -20,6 +20,7 @@ from langchain_openai import ChatOpenAI
 model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 
 # メッセージ
+# --- リストに順番に格納していく
 messages = [
     SystemMessage(content="You are a helpful assistant."),
     HumanMessage(content="こんにちは！私はジョンと言います"),
