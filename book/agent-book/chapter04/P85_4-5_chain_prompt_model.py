@@ -4,7 +4,7 @@ Chapter : 4 LangChainの基礎
 Section : 5 Chain - LangChain Expression Language(LCEL)の概要
 Theme   : promptとmodelの連鎖
 Date    : 2025/06/02
-Page    : P85
+Page    : P85-86
 """
 
 # ＜ポイント＞
@@ -17,6 +17,7 @@ from langchain_openai import ChatOpenAI
 
 
 # プロンプト定義
+# --- {dish}をプレースホルダーとする
 prompt = ChatPromptTemplate.from_messages(
     messages=[
         ("system", "ユーザーが入力した料理のレシピを考えてください。"),

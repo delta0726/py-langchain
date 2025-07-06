@@ -21,20 +21,7 @@ from langchain_community.vectorstores import Chroma
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
 
-# 準備 ------------------------------------------
-
-# プロンプト定義
-prompt = ChatPromptTemplate.from_template(
-    template='''\
-以下の文脈だけを踏まえて質問に回答してください。
-
-文脈: """
-{context}
-"""
-
-質問: {question}
-'''
-)
+# ベクターDBの構築 ---------------------------------
 
 
 # 抽出関数
@@ -49,9 +36,6 @@ loader = GitLoader(
     branch="master",
     file_filter=file_filter,
 )
-
-
-# ベクターDBの構築 ---------------------------------
 
 # ドキュメント読み込み
 # --- 約3-4分かかる
@@ -70,8 +54,20 @@ embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 # ベクターDBの構築
 db = Chroma.from_documents(documents=docs, embedding=embeddings)
 
-# Retrieverの定義
-retriever = db.as_retriever()
+
+# プロンプト定義 ----------------------------------
+
+prompt = ChatPromptTemplate.from_template(
+    template='''\
+        以下の文脈だけを踏まえて質問に回答してください。
+        
+        文脈: """
+        {context}
+        """
+        
+        質問: {question}
+        '''
+)
 
 
 # 問い合わせ --------------------------------------
@@ -81,15 +77,17 @@ retriever = db.as_retriever()
 # - 入力データを"context"と"question"というキーに分けて別々の処理を通す
 # - これによりcontextでRetrieverを使用するように設定している
 
-# LLMの定義
+# パーツ定義
+retriever = db.as_retriever()
 model = ChatOpenAI(model_name="gpt-4o-mini", temperature=0)
+output_parser = StrOutputParser()
 
 # チェイン構築
 chain = (
     {"context": retriever, "question": RunnablePassthrough()}
     | prompt
     | model
-    | StrOutputParser()
+    | output_parser
 )
 
 # 問い合わせ

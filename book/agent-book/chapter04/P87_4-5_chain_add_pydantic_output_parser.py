@@ -3,15 +3,16 @@ Title   : LangChainとLangGraphによるRAG・AIエージェント実践入門
 Chapter : 4 LangChainの基礎
 Section : 5 Chain - LangChain Expression Language(LCEL)の概要
 Theme   : PydanticOutputParserを使う連鎖
-Date    : 2025/05/16
-Page    : P87
+Date    : 2025/07/06
+Page    : P87-88
 """
 
-# ＜ポイント＞
-# - 出力が期待される形式に合っているかを検証してPydanticモデルに変換する
-# - PydanticModelとは構造化データの検証/型付けを簡単に行うためのクラス
-# - JSONで結果を受け取る際にデータ型や出力形式をチェックする（エラーも返す）
-# - 出力パーサーで出力形式を決定してからプロンプトに出力形式を読み込ませる
+
+# ＜概要＞
+# - PydanticOutputParserを使用することで出力パーサーの出力形式を指示
+# - プロンプトに｢以下の形式で出力してください｣という趣旨の指示を入れている
+# - LLMモデルに出力結果がJSONになるように強制している
+# - プロンプト/モデル/出力パーサーのすべてのステップで出力形式を指示している
 
 from langchain_core.output_parsers import PydanticOutputParser
 from pydantic import BaseModel, Field
@@ -20,6 +21,9 @@ from langchain_openai import ChatOpenAI
 
 
 # 出力パーサーの構築 ---------------------------------------
+
+# ＜ポイント＞
+# - PydanticOutputParserで出力形式を指定した出力パーサーを定義
 
 
 # Pydanticモデルの定義
@@ -36,6 +40,12 @@ output_parser = PydanticOutputParser(pydantic_object=Recipe)
 
 # プロンプトの構築 ---------------------------------------
 
+# ＜ポイント＞
+# - 出力パーサーの出力形式をプロンプトに埋め込んでいる
+# - partial()でプロンプトの一部のプレースホルダーのみを更新している
+# - get_format_instructions()は出力形式を文字列に変換する機能を持つ
+#   --- PydanticOutputParser、JsonOutputParser、EnumOutputParserで利用可能
+
 # プロンプト定義
 prompt = ChatPromptTemplate.from_messages(
     messages=[
@@ -48,18 +58,31 @@ prompt = ChatPromptTemplate.from_messages(
 )
 
 # フォーマット指定の追加
+# --- partial()は一部のプレースホルダーのみを更新する
 # --- 出力パーサーのフォーマット指定の読み込み
 prompt_with_format_instructions = prompt.partial(
     format_instructions=output_parser.get_format_instructions()
 )
 
+# 参考：指定したフォーマット
+output_parser.get_format_instructions()
 
-# 問い合わせ --------------------------------------------
+
+# モデル --------------------------------------------
+
+# ＜ポイント＞
+# - bind()はRunnableインターフェースに追加する設定用のメソッド
+# - response_format引数で出力形式を強制することができる（今回はJSONオブジェクト）
+# - モデル側で出力をコントロールすることでPydanticOutputParserの結果を安定させる
+
 
 # モデル定義
 model = ChatOpenAI(model="gpt-4o-mini", temperature=0).bind(
     response_format={"type": "json_object"}
 )
+
+
+# 問い合わせ --------------------------------------------
 
 # チェイン構築
 chain = prompt_with_format_instructions | model | output_parser

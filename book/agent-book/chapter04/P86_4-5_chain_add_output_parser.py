@@ -10,6 +10,7 @@ Page    : P86
 # ＜ポイント＞
 # - ChainにstrOutputParserを追加して問い合わせ結果をテキストで直接抽出する
 # - プロンプト/モデル/出力パーサーのセットがChain構造の基本
+# - Chainを構築する場合は出力形式に意図があるため出力パーサーの定義は必須
 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
@@ -24,12 +25,13 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-# モデル定義
+# パーツ定義
 model = ChatOpenAI(model_name="gpt-4o-mini", temperature=0)
+output_parser = StrOutputParser()
 
 # チェイン構築
 # --- strOutputParserを追加
-chain = prompt | model | StrOutputParser()
+chain = prompt | model | output_parser
 
 # 問い合わせ
 output = chain.invoke(input={"dish": "カレー"})
