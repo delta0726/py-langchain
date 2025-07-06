@@ -4,18 +4,17 @@ Chapter : 5 LangeChain Expression Language(LCEL)の徹底解説
 Section : RunnableとRunnableSequence（LCELの最も基本的な構成要素）
 Theme   : Runnableの実行方法 - invoke/stream/batch
 Date    : 2025/06/04
-Page    : P104
+Page    : P104-106
 """
 
 # ＜概要＞
-# - LCELの基本実行はPrompt template/Chat Model/Output Parserの3つを連結すること
+# - LCELの基本実行はプロンプト/モデル/出力パーサーの3つを連結すること
 # - 上記の3つのメソッドは全てinvoke()で実行することができる
-# - 各オブジェクトは共通の基底クラスを持ち、LCELはこれを利用して実行している
+# - 各オブジェクトはRunnableを基底クラスを持ち、LCELはこれを利用して実行している
 
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
-from langchain_core.tracers.langchain import LangChainTracer
 
 
 # コンポーネント定義 ------------------------------------------
@@ -57,7 +56,7 @@ output = output_parser.invoke(input=ai_message)
 print(output)
 
 
-# LCELによる問い合わせ --------------------------------------
+# Chainによる問い合わせ --------------------------------------
 
 # ＜ポイント＞
 # - チェインは各コンポーネントをRunnableSequenceに統合している

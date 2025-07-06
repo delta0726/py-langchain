@@ -4,7 +4,7 @@ Chapter : 5 LangeChain Expression Language(LCEL)の徹底解説
 Section : LCELの｢|｣でさまざまなRunnableを連鎖させる
 Theme   : チェイン同士をパイプで連結する
 Date    : 2025/06/04
-Page    : P108
+Page    : P108-109
 """
 
 # ＜概要＞
@@ -49,6 +49,9 @@ summarize_prompt = ChatPromptTemplate.from_messages(
 # チェーン構築
 cot_chain = cot_prompt | model | output_parser
 summarize_chain = summarize_prompt | model | output_parser
+
+# チェイン結合
+# --- cot_chainのアウトプットは{text}として渡される
 cot_summarize_chain = cot_chain | summarize_chain
 
 # 問い合わせ
