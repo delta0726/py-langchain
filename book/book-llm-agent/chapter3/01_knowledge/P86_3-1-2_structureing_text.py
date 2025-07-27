@@ -3,7 +3,7 @@ Title   : やさしく学ぶLLMエージェント
 Chapter : 3 エージェント
 Section : 1 LLLMに知識を与える
 Theme   : 文書の構造化（DB化）
-Date    : 2025/07/18
+Date    : 2025/07/27
 Page    : P85-90
 """
 
@@ -13,7 +13,14 @@ Page    : P85-90
 # - DocumentクラスとChromaDBを使った文書のDB化を行う
 # - このプロセスはRAGによる検索の橋渡しとなる
 
-# ＜ChromaDBとは＞
+
+# ＜Documentクラス＞
+# - paege_content: 文章の実際のテキスト内容を保持する
+# - metadata: 文書のメタデータ（ソース、ページ、著者、日付など）
+# - DocumentクラスはLangChainで文書を表現するための基本的なクラス
+
+
+# ＜ChromaDB＞
 # - ChromaDBはベクトル検索とセマンティック検索に特化したDB
 #   --- ベクトル検索は単語類似性で検索し、セマンティック検索は意味に基づいて検索する
 

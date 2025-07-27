@@ -3,7 +3,7 @@ Title   : やさしく学ぶLLMエージェント
 Chapter : 3 エージェント
 Section : 1 LLLMに知識を与える
 Theme   : Contextから知識を与える
-Date    : 2025/07/18
+Date    : 2025/07/27
 Page    : P82-85
 """
 
@@ -13,6 +13,14 @@ Page    : P82-85
 # - プロンプトに背景知識を入れ込むため、大規模になると柔軟性や透明性に欠ける
 # - RAGよりも手間がかからない手軽な方法と言える
 
+# ＜LLMに知識を与える方法＞
+# 1. 事前学習 
+# 2. ファインチューニング
+# 3. プロンプトエンジニアリング（今回の方法）
+# 4. RAG
+# 5. メモリ機能の活用
+
+
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage
 from langchain_core.prompts import ChatPromptTemplate
@@ -21,14 +29,15 @@ from langchain_core.prompts import ChatPromptTemplate
 # 準備 ------------------------------------------------------------
 
 # モデル定義
-model = ChatOpenAI(model="gpt-4o-mini")
+model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 
 
 # 単一メッセージで回答させる --------------------------------------------
 
 # ＜ポイント＞
-# - LLMはプロンプトから熊童子が妖怪か植物かが判定できない
-# - 結果として可能性の高い妖怪の方を回答している
+# - LLMはWebから事前学習した知識で回答するが、プロンプトから熊童子が妖怪か植物かが判定できない
+# - 結果として可能性の高い妖怪の方を回答している（templature=0の場合）
+#   --- templatureを上げると、植物について言及する可能性も出てくる
 
 
 # 問い合わせ
@@ -41,6 +50,12 @@ print(simple_result.content)
 
 
 # 背景知識を前提に回答させる --------------------------------------------
+
+# ＜ポイント＞
+# - Contextに基づいて回答することをプロンプトで指示する
+# - LLMは事前知識ではなく、LLMが持つ思考力と与えられた背景知識をもとに回答する
+# - プロンプトをテンプレート化してモデルとチェインにして実行する
+
 
 # プロンプト定義
 # --- contextをもとにquestionに回答することを明記
