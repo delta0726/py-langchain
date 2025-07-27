@@ -28,7 +28,7 @@ os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGSMITH_PROJECT"] = "agent-book"
 
 # モデルとプロンプト
-llm = ChatOpenAI(model="gpt-4o")
+llm = ChatOpenAI(model="gpt-4o-mini")
 prompt = ChatPromptTemplate.from_template("日本の首都は？")
 chain = prompt | llm
 
