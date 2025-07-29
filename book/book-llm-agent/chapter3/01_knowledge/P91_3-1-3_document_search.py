@@ -3,13 +3,14 @@ Title   : やさしく学ぶLLMエージェント
 Chapter : 3 エージェント
 Section : 1 LLLMに知識を与える
 Theme   : 文書検索機能を持つLLM
-Date    : 2025/07/18
+Date    : 2025/07/29
 Page    : P91-93
 """
 
 # ＜概要＞
-# - Contextにから与える背景知識をChromaDBから取得する
-# - ChromaDBの大量の文書の中から質問に近い文書を抽出してContextに与える
+# - Contextにから与える背景知識をRetrieverを用いてChromaDBから検索して取得する
+# - 関連文書のみをプロンプトに与えることでプロンプトが計量化されピンポイントの回答が期待できる
+
 
 from langchain_core.documents import Document
 from langchain_core.prompts import ChatPromptTemplate
@@ -64,6 +65,7 @@ vectorstore = Chroma.from_documents(documents=documents, embedding=OpenAIEmbeddi
 
 # ＜ポイント＞
 # - ChromaDBを検索するためのRetriever(検索器)を定義する
+# - Retrieverは質問に関連する文書や情報から大量のデータセットから素早く見つけ出す検索機能
 # - プロンプトをテンプレート化しておいて、テンプレートのパラメータを事前に作成する
 
 
@@ -79,22 +81,23 @@ Context:
 """
 
 # コンポーネント定義
-# --- 検索器の定義
+# --- 検索器の定義(Runnableに変換)
 # --- プロンプト
 # --- 言語モデル
-retriever = RunnableLambda(vectorstore.similarity_search).bind(k=1)
+retriever = RunnableLambda(func=vectorstore.similarity_search).bind(k=1)
 prompt = ChatPromptTemplate.from_messages(messages=[("human", message_template)])
 model = ChatOpenAI(model="gpt-4o-mini")
 
 # チェイン構築
-# --- Contextはリトリーバーから取得し、Questionはオリジナルの質問を転用する
+# --- contextはretrieverに渡されて質問に関連する文書を取得
+# --- questionはinvoke()の質問をそのままプロンプトに渡す
 rag_chain = {"context": retriever, "question": RunnablePassthrough()} | prompt | model
 
 
 # Step3: RAGによる問い合わせ -----------------------------------
 
 # 問い合わせ
-result = rag_chain.invoke("熊童子について教えてください。")
+result = rag_chain.invoke(input="熊童子について教えてください。")
 
 # 結果確認
 print(result.content)

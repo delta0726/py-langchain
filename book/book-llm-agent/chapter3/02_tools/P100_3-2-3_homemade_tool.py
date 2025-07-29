@@ -3,14 +3,13 @@ Title   : やさしく学ぶLLMエージェント
 Chapter : 3 エージェント
 Section : 2 LLLMにツールを与える
 Theme   : ツールを自作する
-Date    : 2025/07/18
+Date    : 2025/07/29
 Page    : P100-107
 """
 
 # ＜概要＞
-# - ツールはPythonで自作することも可能
-# - ツールはPythonの関数として定義するので目的によりフィットした操作が可能となる
-# - ただし、ツール実行は人間がプログラムを書くことで実現している
+# - ツールはPythonの関数として定義することができ、目的によりフィットした操作が可能となる
+# - 本例ではツール選択はLLMが行っているが、実行トリガーは人間がプログラムを書くことで実現している
 #   --- 次節ではエージェント導入によりLLMにツールの実行判断も委ねることを目指す
 
 from langchain_openai import ChatOpenAI
@@ -30,7 +29,8 @@ import random
 # 運勢を占う関数
 def get_fortune(date_string="1月1日"):
     try:
-        date = datetime.strptime(date_string, "%m月%d日")
+        # 年を補完して変換
+        date = datetime.strptime("2025年" + date_string, "%Y年%m月%d日")
     except ValueError:
         return "無効な日付形式です。'X月X日'の形式で入力してください。"
 
@@ -39,7 +39,7 @@ def get_fortune(date_string="1月1日"):
     random.seed(date.month * 100 + date.day)
     fortune = random.choices(population=fortunes, weights=weights)[0]
 
-    return f"{date_string}の運勢は【{fortune}】です。"
+    return f"{date.month}月{date.day}日の運勢は【{fortune}】です。"
 
 
 # 日付を返す関数（今日・明日・明後日のみ対応）
@@ -88,7 +88,7 @@ class GetDateTool(BaseTool):
 
 def run_model(question: str, tools: list[BaseTool]):
     model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
-    model_with_tools = model.bind_tools(tools)
+    model_with_tools = model.bind_tools(tools=tools)
 
     # 事前問い合わせ
     # --- 質問事項に適切なツール選択と
@@ -112,14 +112,17 @@ def run_model(question: str, tools: list[BaseTool]):
 # 実行例
 if __name__ == "__main__":
     # 特定日付の運勢を質問
-    run_model(question="10月22日の運勢を教えてください。", tools=[GetFortuneTool()])
+    run_model(
+        question="7月22日の運勢を教えてください。", tools=[GetFortuneTool()]
+    )
 
     # 日付を質問
     run_model(question="今日の日付を教えてください。", tools=[GetDateTool()])
 
     # 今日の日付に基づく運勢を質問
     # --- 2つのツールを使用している
-    # --- 実際はツールは片方しか選択されていない（複雑な推論に対応できていない）
+    # --- 今日の日付をGetDateToolで取得して、GetFortuneTool()を呼び出すことを想定
+    # --- 実際は"今日"に反応してGetDateToolしか実行されない（複雑な推論に対応できていない）
     run_model(
         question="今日の運勢を教えてください。", tools=[GetFortuneTool(), GetDateTool()]
     )

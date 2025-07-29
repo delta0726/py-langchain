@@ -3,14 +3,15 @@ Title   : やさしく学ぶLLMエージェント
 Chapter : 3 エージェント
 Section : 2 LLLMにツールを与える
 Theme   : プログラム実行ツール
-Date    : 2025/07/18
+Date    : 2025/07/29
 Page    : P97-100
 """
 
 # ＜概要＞
-# - LLMは数値演算を直接的に行うわけではないので基本的にできない
-# - その場合はPythonなどの演算機能でツール経由で利用することで解決する
-
+# - LLMは数値演算を直接的に行うわけではないので苦手とされる
+# - Pythonなどの演算機能でツール経由で利用することで解決する
+# - PythonREPLToolはプロンプトからPythonコードを実行できるツール
+#   --- プロンプトから処理すべきコードを認識してする
 
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage
@@ -36,14 +37,14 @@ response = model_with_tools.invoke(input=[HumanMessage(content=question)])
 
 # 結果確認
 # --- コンテンツは何も入っていない
-# --- 使用するツールと検索キーワードが提示されている
+# --- PythonREPLがprint(1873648 + 9285928 + 3759182 + 2398597)を処理すべきと認識
 print(f"[LLM Output] content: {response.content}")
 print(f"[LLM Output] tool_calls: {response.tool_calls}")
 
 # ツール実行
 # --- 事前に得たツール選択とインプット情報に基づいてLLMが処理を実行
 tool_args = response.tool_calls[0]["args"]
-result = python_tool.invoke(tool_args)
+result = python_tool.invoke(input=tool_args)
 print(f"[Python Execution Result] {result}")
 
 # 正解値（人間による確認用）
