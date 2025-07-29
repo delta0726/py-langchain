@@ -9,8 +9,12 @@ Page    : P100-107
 
 # ＜概要＞
 # - ツールはPythonの関数として定義することができ、目的によりフィットした操作が可能となる
+# - AgentがReActによる推論を行うことで、ツール選択や引数設定のための事前質問をすることなく実現できる
+
+# ＜今後の課題＞
 # - 本例ではツール選択はLLMが行っているが、実行トリガーは人間がプログラムを書くことで実現している
 #   --- 次節ではエージェント導入によりLLMにツールの実行判断も委ねることを目指す
+
 
 from langchain_openai import ChatOpenAI
 from langchain.schema import HumanMessage
