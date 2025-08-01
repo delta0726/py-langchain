@@ -30,7 +30,6 @@ from langchain_core.prompts import ChatPromptTemplate
 user_id = "elith_chan"
 language = "English"
 
-
 # インスタンス定義
 # --- LLM Model
 # --- Mem0
