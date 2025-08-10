@@ -3,9 +3,19 @@ Title   : やさしく学ぶLLMエージェント
 Chapter : 4 マルチエージェント
 Section : 2 マルチエージェントシステムの構築
 Theme   : 複数エージェントの接続（3つのエージェントが順番に応答）
-Date    : 2025/07/21
+Date    : 2025/08/06
 Page    : P162-169
 """
+
+# ＜概要＞
+# - 3種類のエージェントが順番に応答するシステムを構築する
+# - これまでのエージェントの発言を踏まえてペルソナに基づいて回答している
+
+# ＜エージェントの役割＞
+# - kenta : アクティブで社交的な性格のエージェント 
+# - mari  : 穏やかで静かな性格のエージェント
+# - yuta  : 柔軟性のある性格のエージェント
+
 
 import functools
 
@@ -27,26 +37,38 @@ from IPython.display import display, Image
 llm: ChatOpenAI = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 
 
-# 状態の定義
+# Stateの定義
 class State(TypedDict):
     messages: Annotated[List[BaseMessage], add_messages]
 
 
 # エージェント関数の定義 -----------------------------
 
+# ＜ポイント＞
+# - 過去の状態把握をするためstateを渡している
+# - リストに格納されているstateをアンパックすることで過去の会話を伝えている
+#   --- 会話以外にもidなどの情報が含まれるがLLMには問題なく解釈できる
+
 
 def agent_with_persona(
     state: State, name: str, traits: str
 ) -> Dict[str, List[BaseMessage]]:
-    # ペルソナを含むシステムメッセージの生成
+    # ペルソナを含むシステムメッセージのテンプレート
     system_template: SystemMessagePromptTemplate = (
         SystemMessagePromptTemplate.from_template(
-            "あなたの名前は{name}です。\nあなたの性格は以下のとおりです。\n\n{traits}"
+            template="""
+            あなたの名前は{name}です。
+            あなたの性格は以下のとおりです。
+            {traits}
+            """
         )
     )
+    
+    # テンプレートからメッセージ作成
     system_message: SystemMessage = system_template.format(name=name, traits=traits)
 
     # LLM 応答の生成と名前付きメッセージ化
+    # --- stateのリストをアンパックしたうえでメッセージを追記している
     response: BaseMessage = llm.invoke(input=[system_message, *state["messages"]])
     named_message: HumanMessage = HumanMessage(content=response.content, name=name)
 
@@ -55,27 +77,31 @@ def agent_with_persona(
 
 # 各ペルソナの定義とノード化------------------------------
 
-kenta_traits = """\
+kenta_traits = """
 - アクティブで冒険好き
 - 新しい経験を求める
 - アウトドア活動を好む
 - SNSでの共有を楽しむ
-- エネルギッシュで社交的"""
+- エネルギッシュで社交的
+"""
 
-mari_traits = """\
+mari_traits = """
 - 穏やかでリラックス志向
 - 家族を大切にする
 - 静かな趣味を楽しむ
 - 心身の休養を重視
-- 丁寧な生活を好む"""
+- 丁寧な生活を好む
+"""
 
-yuta_traits = """\
+yuta_traits = """
 - バランス重視
 - 柔軟性がある
 - 自己啓発に熱心
 - 伝統と現代の融合を好む
-- 多様な経験を求める"""
+- 多様な経験を求める
+"""
 
+# エージェント定義
 kenta = functools.partial(agent_with_persona, name="kenta", traits=kenta_traits)
 mari = functools.partial(agent_with_persona, name="mari", traits=mari_traits)
 yuta = functools.partial(agent_with_persona, name="yuta", traits=yuta_traits)
@@ -83,8 +109,12 @@ yuta = functools.partial(agent_with_persona, name="yuta", traits=yuta_traits)
 
 # グラフ構築 ---------------------------------------------
 
+# ＜ポイント＞
+# - 直列的にブラフを構築する
+
+
 # グラフ初期化
-graph_builder = StateGraph(State)
+graph_builder = StateGraph(state_schema=State)
 
 # ノードの定義
 graph_builder.add_node(node="kenta", action=kenta)
@@ -92,6 +122,7 @@ graph_builder.add_node(node="mari", action=mari)
 graph_builder.add_node(node="yuta", action=yuta)
 
 # エッジの追加
+# --- 逐次的に結合する
 graph_builder.add_edge(start_key=START, end_key="kenta")
 graph_builder.add_edge(start_key="kenta", end_key="mari")
 graph_builder.add_edge(start_key="mari", end_key="yuta")
@@ -107,7 +138,13 @@ display(Image(graph.get_graph().draw_mermaid_png()))
 # 実行 -------------------------------------------------
 
 # 質問
-human_message = HumanMessage(content="休日の過ごし方について、建設的に議論してください。")
+content = """
+- 休日の過ごし方について、建設的に議論してください。
+- すでに発言した人がいる場合は、その内容についてコメントしてください。
+"""
+
+# メッセージ定義
+human_message = HumanMessage(content=content)
 
 # 議論スタート
 for event in graph.stream({"messages": [human_message]}):

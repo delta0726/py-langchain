@@ -3,9 +3,18 @@ Title   : やさしく学ぶLLMエージェント
 Chapter : 4 マルチエージェント
 Section : 2 マルチエージェントシステムの構築
 Theme   : 複数エージェントの接続
-Date    : 2025/07/21
+Date    : 2025/08/06
 Page    : P162-172
 """
+
+# ＜概要＞
+# - 3種類のエージェントを同時に応答するシステムを構築する
+#   --- 同時に処理されるため実行時間は1エージェントに近くなる
+
+# ＜エージェントの役割＞
+# - kenta : アクティブで社交的な性格のエージェント
+# - mari  : 穏やかで静かな性格のエージェント
+# - yuta  : 柔軟性のある性格のエージェント
 
 
 import functools
@@ -28,7 +37,7 @@ from IPython.display import display, Image
 llm: ChatOpenAI = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 
 
-# 状態の定義
+# Stateの定義
 class State(TypedDict):
     messages: Annotated[List[BaseMessage], add_messages]
 
@@ -56,27 +65,31 @@ def agent_with_persona(
 
 # 各ペルソナの定義とノード化------------------------------
 
-kenta_traits = """\
+kenta_traits = """
 - アクティブで冒険好き
 - 新しい経験を求める
 - アウトドア活動を好む
 - SNSでの共有を楽しむ
-- エネルギッシュで社交的"""
+- エネルギッシュで社交的
+"""
 
-mari_traits = """\
+mari_traits = """
 - 穏やかでリラックス志向
 - 家族を大切にする
 - 静かな趣味を楽しむ
 - 心身の休養を重視
-- 丁寧な生活を好む"""
+- 丁寧な生活を好む
+"""
 
-yuta_traits = """\
+yuta_traits = """
 - バランス重視
 - 柔軟性がある
 - 自己啓発に熱心
 - 伝統と現代の融合を好む
-- 多様な経験を求める"""
+- 多様な経験を求める
+"""
 
+# エージェント定義
 kenta = functools.partial(agent_with_persona, name="kenta", traits=kenta_traits)
 mari = functools.partial(agent_with_persona, name="mari", traits=mari_traits)
 yuta = functools.partial(agent_with_persona, name="yuta", traits=yuta_traits)
@@ -84,8 +97,12 @@ yuta = functools.partial(agent_with_persona, name="yuta", traits=yuta_traits)
 
 # グラフ構築 ---------------------------------------------
 
+# ＜ポイント＞
+# - 並列的にブラフを構築する
+
+
 # グラフ初期化
-graph_builder = StateGraph(State)
+graph_builder = StateGraph(state_schema=State)
 
 # ノードの定義
 graph_builder.add_node(node="kenta", action=kenta)
@@ -110,7 +127,12 @@ display(Image(graph.get_graph().draw_mermaid_png()))
 # 実行 -------------------------------------------------
 
 # 質問
-human_message = HumanMessage(content="休日の過ごし方について、建設的に議論してください。")
+content = """
+- 休日の過ごし方について、建設的に議論してください。
+"""
+
+# メッセージ定義
+human_message = HumanMessage(content=content)
 
 # 議論スタート
 for event in graph.stream({"messages": [human_message]}):

@@ -7,6 +7,11 @@ Date    : 2025/07/21
 Page    : P172-177
 """
 
+# ＜概要＞
+# - 3種類のエージェントから監督者が指名したエージェントが発言するシステムを構築する
+#   --- 監督者エージェント(スーパーバイザー)を定義する
+#   --- スーパーバイザーがエージェント辞書から選択する
+
 import functools
 from typing import Annotated, List, Dict, Literal
 from typing_extensions import TypedDict
@@ -53,35 +58,42 @@ def agent_with_persona(
     return {"messages": [named_message]}
 
 
-# 各ペルソナの定義とノード化------------------------------
+# エージェントの定義と辞書化------------------------------
 
-kenta_traits = """\
+# ＜ポイント＞
+# -
+
+
+kenta_traits = """
 - アクティブで冒険好き
 - 新しい経験を求める
 - アウトドア活動を好む
 - SNSでの共有を楽しむ
-- エネルギッシュで社交的"""
+- エネルギッシュで社交的
+"""
 
-mari_traits = """\
+mari_traits = """
 - 穏やかでリラックス志向
 - 家族を大切にする
 - 静かな趣味を楽しむ
 - 心身の休養を重視
-- 丁寧な生活を好む"""
+- 丁寧な生活を好む
+"""
 
-yuta_traits = """\
+yuta_traits = """
 - バランス重視
 - 柔軟性がある
 - 自己啓発に熱心
 - 伝統と現代の融合を好む
-- 多様な経験を求める"""
+- 多様な経験を求める
+"""
 
-# メンバー
+# エージェント定義
 kenta = functools.partial(agent_with_persona, name="kenta", traits=kenta_traits)
 mari = functools.partial(agent_with_persona, name="mari", traits=mari_traits)
 yuta = functools.partial(agent_with_persona, name="yuta", traits=yuta_traits)
 
-# メンバー辞書
+# エージェント辞書
 member_dict = {
     "kenta": kenta_traits,
     "mari": mari_traits,
@@ -90,6 +102,11 @@ member_dict = {
 
 
 # スーパーバイザーの設定 ----------------------------------------
+
+# ＜ポイント＞
+# - エージェントを選択するスーパーバイザーを設定する
+#   --- スーパーバイザーがエージェントを選んだ理由は出力されない
+#   --- 適当に選んでいる可能性が高い
 
 
 class RouteSchema(BaseModel):
@@ -102,11 +119,15 @@ def supervisor(state: State) -> Dict[str, str]:
         [f"**{name}**\n{traits}" for name, traits in member_dict.items()]
     )
 
-    system_template = SystemMessagePromptTemplate.from_template(
-        "あなたは以下の作業者間の会話を管理する監督者です：{members}。"
-        "各メンバーの性格は以下の通りです。\n{traits_description}"
-        "与えられたユーザーリクエストに対して、次に発言する人を選択してください。"
-    )
+    template = """
+    あなたは以下の作業者間の会話を管理する監督者です：{members}。
+    各メンバーの性格は以下の通りです。
+    {traits_description}
+    与えられたユーザーリクエストに対して、次に発言する人を選択してください。
+    """
+
+    # SystemMessagePromptTemplateにテンプレート文字列を渡す
+    system_template = SystemMessagePromptTemplate.from_template(template=template)
     system_message = system_template.format(
         members=members, traits_description=traits_description
     )
