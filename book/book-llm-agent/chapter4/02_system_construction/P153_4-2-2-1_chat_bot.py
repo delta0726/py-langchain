@@ -18,7 +18,6 @@ Page    : P153-162
 # - Edge  : ノード同士のつながりを表す要素
 # - Graph : ノード・エッジから構成されるシステム全体を表す要素
 
-
 # モジュールのインポート
 from typing_extensions import TypedDict
 from typing import Annotated
@@ -104,7 +103,7 @@ display(Image(data=graph.get_graph().draw_mermaid_png()))
 
 # ＜ポイント＞
 # - Humanメッセージで質問事項を提示する
-# - 初期状態をStateに与えるため辞書で状態を定義する
+# - 初期状態をStateに与えるため辞書でinitial_stateを定義する
 
 
 initial_message = HumanMessage(content="上手くデバッグができません")
